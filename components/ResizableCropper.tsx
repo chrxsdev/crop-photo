@@ -22,6 +22,8 @@ export default function ResizableCropper({
   onChange: (callback: (prev: CropperDimensions) => CropperDimensions) => void;
   containerLayout: ContainerLayout;
 }) {
+
+  // TODO: Allow user to drag crop section & prevent it from going out of the image
   const createResponder = (corner: string) =>
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,

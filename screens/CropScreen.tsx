@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
+import * as ImageManipulator from 'expo-image-manipulator';
 import * as MediaLibrary from 'expo-media-library';
 import { calculateCrop } from '../utils/lib';
 import ResizableCropper from '../components/ResizableCropper';
@@ -13,8 +13,9 @@ export default function CropScreen() {
 
   const [layout, setLayout] = useState({ width: 1, height: 1 });
   const [cropper, setCropper] = useState({
-    x: 50,
-    y: 50,
+    // TODO: Calculate exactly center of the screen based on devices dimensions
+    x: 90,
+    y: 270,
     width: 200,
     height: 200,
   });
@@ -23,12 +24,14 @@ export default function CropScreen() {
     try {
       const cropData = calculateCrop(photo, layout, cropper);
 
-      const cropped = await manipulateAsync(photo.uri, [{ crop: cropData }], { compress: 1, format: SaveFormat.JPEG });
-
+      const context = ImageManipulator.ImageManipulator.manipulate(photo.uri);
+      context.crop(cropData);
+      const img = await context.renderAsync();
+      const result = await img.saveAsync({format: ImageManipulator.SaveFormat.JPEG, compress: 1})
       //const asset = await MediaLibrary.createAssetAsync(cropped.uri);
       //await MediaLibrary.createAlbumAsync('CroppedPhotos', asset, false);
-      console.log(cropped);
-      await MediaLibrary.saveToLibraryAsync(cropped.uri);
+
+      await MediaLibrary.saveToLibraryAsync(result.uri);
 
       Alert.alert('Saved', 'Cropped images saved.');
       navigation.goBack();
@@ -65,7 +68,7 @@ export default function CropScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'black' },
+  container: { flex: 1, backgroundColor: 'white' },
   imageContainer: { flex: 1 },
   image: { width: '100%', height: '100%' },
   buttons: { flexDirection: 'row', justifyContent: 'space-around', padding: 20 },

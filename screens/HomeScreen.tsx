@@ -10,7 +10,7 @@ export default function HomeScreen() {
   const takePhoto = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      alert('Permiso de cámara denegado');
+      alert('Camera access denied');
       return;
     }
 
