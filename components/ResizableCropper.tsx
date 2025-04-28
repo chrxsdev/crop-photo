@@ -31,7 +31,7 @@ export default function ResizableCropper({
 
         onChange((prev) => {
           const updated = { ...prev };
-          const limit = 30; // mínimo 30px de ancho/alto
+          const limit = 30;
 
           switch (corner) {
             case 'topLeft':
@@ -82,7 +82,7 @@ export default function ResizableCropper({
         },
       ]}
     >
-      {/* Esquinas */}
+      {/* Corners */}
       <View {...topLeft.panHandlers} style={[styles.corner, { left: -15, top: -15 }]} />
       <View {...topRight.panHandlers} style={[styles.corner, { right: -15, top: -15 }]} />
       <View {...bottomLeft.panHandlers} style={[styles.corner, { left: -15, bottom: -15 }]} />

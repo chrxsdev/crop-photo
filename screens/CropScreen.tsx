@@ -30,11 +30,11 @@ export default function CropScreen() {
       console.log(cropped);
       await MediaLibrary.saveToLibraryAsync(cropped.uri);
 
-      Alert.alert('✅ Guardado', 'Imagen recortada guardada en galería.');
+      Alert.alert('Saved', 'Cropped images saved.');
       navigation.goBack();
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'No se pudo hacer el crop.');
+      Alert.alert('Error', 'Something failed.');
     }
   };
 
